@@ -1,4 +1,4 @@
-from app.songs.hasher import SongHasher
+from app.utils.hasher import SongHasher
 from app.songs.repository import SongRepository
 
 
