@@ -1,16 +1,17 @@
 import secrets
-from typing import List
+from typing import List, Tuple
+import os
 
 from fastapi import UploadFile
 
 from app.schemas.file import FileBase
 from app.songs.exceptions import FormatError
-from app.utils.interface import HasherInterface
+from app.utils.hashers.interface import HasherInterface
 
 
 class Hasher(HasherInterface):
     def __init__(self, file: UploadFile,
-                 path: str,
+                 path: Tuple[str],
                  formats: List[str]):
         self.file = file
         self.path = path
@@ -24,6 +25,7 @@ class Hasher(HasherInterface):
             if extension not in self.formats:
                 raise ValueError("wrong format") from Exception
             else:
+                os.makedirs(path, exist_ok=True)
                 token_name = secrets.token_hex(15) + "." + extension
                 generated_name = path + token_name
                 file_content = await self.file.read()
@@ -33,3 +35,4 @@ class Hasher(HasherInterface):
                                 filename=filename)
         except Exception as e:
             raise FormatError from e
+

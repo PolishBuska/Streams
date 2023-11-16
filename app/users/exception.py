@@ -1,0 +1,3 @@
+
+class RegistrationException(Exception):
+    ...

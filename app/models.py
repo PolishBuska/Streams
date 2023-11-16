@@ -1,7 +1,8 @@
 from sqlalchemy import (ForeignKey,
                         Column,
                         TIMESTAMP,
-                        func)
+                        func,
+                        )
 from sqlalchemy.orm import (Mapped,
                             mapped_column,
                             relationship)
@@ -9,14 +10,21 @@ from sqlalchemy.orm import (Mapped,
 from app.db import Base
 
 
+class Roles(Base):
+    __tablename__ = "role"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    role: Mapped[str]
+
+
 class User(Base):
     __tablename__ = "user"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str]
+    email: Mapped[str] = mapped_column(unique=True)
     nickname: Mapped[str]
     password: Mapped[str]
-    role_id: Mapped[int]
+    role_id: Mapped[int] = mapped_column(ForeignKey('role.id'))
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False,
                         server_default=func.now())
@@ -36,9 +44,8 @@ class Song(Base):
     __tablename__ = "song"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    cover_link: Mapped[str]
-    title: Mapped[int]
-    author_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"),
+    title: Mapped[str] = mapped_column(unique=True)
+    author_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"),
                                            nullable=False)
     author = relationship("User",
                           backref="Songs")

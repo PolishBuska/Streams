@@ -1,32 +1,28 @@
+from enum import Enum
 from typing import Annotated
 
 from pydantic import (BaseModel,
-                      constr,
-                      ConfigDict,
                       EmailStr,
-                      Field)
+                      ConfigDict)
+from pydantic.types import constr
 
-from enum import Enum
 
-
-class Roles(Enum):
-    Listener: 1
-    Publisher: 2
+class Roles(int, Enum):
+    Listener = 1
+    Publisher = 2
 
 
 class UserBase(BaseModel):
-    id: int
-    username: Annotated[str, constr(max_length=25)]
+    nickname: Annotated[str, constr(max_length=25)]
     email: EmailStr
-    password: Annotated[str, constr(max_length=50)]
     role_id: Roles
-    model_config = ConfigDict(extra='allow', from_attributes=True)
+    model_config = ConfigDict(extra='ignore', from_attributes=True)
 
 
 class CreateUser(UserBase):
-    id: int = Field(exclude=True)
+    password: Annotated[str, constr(max_length=50)]
 
 
 class ReturnUser(UserBase):
-    password: str = Field(exclude=True)
+    id: int
 

@@ -7,7 +7,7 @@ from starlette import status
 
 from app.config import settings
 from app.models import User
-from app.users.jwt_schema import Token
+from app.schemas.jwt import TokenPayLoad
 from app.users.repository import UserRepository
 
 
@@ -38,11 +38,10 @@ class AuthProvider:
                                  self.SECRET_KEY,
                                  algorithms=[self.ALGORITHM])
             user_id = payload.get("user_id")
-            role_id = payload.get("user_role_id")
-            if id is None:
-                raise credentials_exception
-            token_data = Token(id=user_id,
-                               role_id=role_id)
+            role_id = payload.get("role_id")
+
+            token_data = TokenPayLoad(user_id=user_id,
+                                      role_id=role_id)
         except JWTError:
             raise credentials_exception
         return token_data
@@ -55,7 +54,7 @@ class AuthProvider:
                                                   headers={"WWW-Authenticate": "Bearer"})
             token_verified = await self.verify_access_token(token, credentials_exception)
             db_manager = UserRepository()
-            user = await db_manager.find_one(user_id=token_verified.id)
+            user = await db_manager.find_one(user_id=token_verified.user_id)
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail=f'Could not validate credentials',

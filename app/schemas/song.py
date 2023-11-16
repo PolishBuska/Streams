@@ -6,11 +6,21 @@ from pydantic import (BaseModel,
 from app.schemas.file import FileBase
 
 
-class SongBase(BaseModel):
-    id: int
+class SongBaseInfo(BaseModel):
     title: Annotated[str, constr(max_length=100)]
-    description: Annotated[str, constr(max_length=25)]
+    desc: Annotated[str, constr(max_length=25)]
+    model_config = ConfigDict(extra='ignore',
+                              from_attributes=True)
+
+
+class SongCreate(SongBaseInfo):
+    pass
+
+
+class ReturnSongInfo(SongBaseInfo):
+    id: int
+
+
+class SongFileInfo(SongBaseInfo):
+    id: int
     file: FileBase
-    model_config = ConfigDict(extra='allow', from_attributes=True)
-
-
