@@ -8,8 +8,8 @@ from app.models import User
 from app.auth.jwt_handler import AuthProvider
 
 router = APIRouter(
-    prefix='/listener/me/songs',
-    tags=['songs']
+    prefix='/listener/me/',
+    tags=['listeners']
 )
 
 
@@ -22,7 +22,7 @@ async def get_liked_songs_by_user(current_user: User = Depends(AuthProvider().ge
     raise NotImplementedError
 
 
-@router.post('/{song_id}/personal_playlist')
+@router.post('/{song_id}')
 async def like_song(song_id: int):
     raise NotImplementedError
 

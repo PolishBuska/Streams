@@ -8,7 +8,7 @@ from app.schemas.file import FileBase
 
 class SongBaseInfo(BaseModel):
     title: Annotated[str, constr(max_length=100)]
-    desc: Annotated[str, constr(max_length=25)]
+    description: Annotated[str, constr(max_length=25)]
     model_config = ConfigDict(extra='ignore',
                               from_attributes=True)
 

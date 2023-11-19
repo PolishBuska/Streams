@@ -6,7 +6,7 @@ from fastapi import (APIRouter,
                      Depends,
                      )
 
-from app.models import User
+from app.models import User, Song
 from app.songs.service import SongService
 from app.auth.jwt_handler import AuthProvider
 from app.schemas.song import SongCreate
@@ -14,11 +14,11 @@ from app.songs.repository import SongRepository
 
 router = APIRouter(
     prefix='/publisher',
-    tags=['songs']
+    tags=['publishers']
 )
 
 
-@router.post('/song/create')
+@router.post('/create')
 async def create_song(song_info: SongCreate = Depends(),
                       file: UploadFile = File(...),
                       current_user: User = Depends(AuthProvider().get_current_user)):
@@ -35,7 +35,7 @@ async def get_song_by_user(current_user: User = Depends(AuthProvider().get_curre
                            offset: int = 0,
                            search: Optional[str] = ""
                            ):
-    db_adapter = SongRepository()
+    db_adapter = SongRepository(model=Song)
     result = await db_adapter.get_songs_by_user(user_id=current_user.id,
                                                 limit=limit,
                                                 offset=offset,

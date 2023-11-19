@@ -53,8 +53,8 @@ class AuthProvider:
                                                   detail=f'Could not validate credentials',
                                                   headers={"WWW-Authenticate": "Bearer"})
             token_verified = await self.verify_access_token(token, credentials_exception)
-            db_manager = UserRepository()
-            user = await db_manager.find_one(user_id=token_verified.user_id)
+            db_manager = UserRepository(model=User)
+            user = await db_manager.find_one(pk=token_verified.user_id)
         except JWTError:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
                                 detail=f'Could not validate credentials',

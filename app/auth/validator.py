@@ -3,13 +3,14 @@ free direct usage"""
 from app.utils.pwd import PwdContext
 from app.users.repository import UserRepository
 from app.auth.exceptions import WrongCredsException, ValidatorError
+from app.models import User
 
 
 class AuthCredValidator:
     """Do not expose user's password,"""
 
     _checker = PwdContext.pwd_context
-    repo = UserRepository()
+    repo = UserRepository(model=User)
 
     async def validate(self, email: str, plain_password: str) -> dict:
         """Validate user's creds"""
