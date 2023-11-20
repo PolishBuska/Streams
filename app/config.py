@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     secret_key: str
     algorithm: str
     access_token_expire_minutes: int
+    static: str
 
     @property
     def db_url(self):

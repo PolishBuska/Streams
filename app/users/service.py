@@ -18,5 +18,4 @@ class RegistrationService:
             user = await self.repo.add_one(data=self.creds.model_dump())
             return user
         except Exception as e:
-            print(e)
             raise RegistrationException from e

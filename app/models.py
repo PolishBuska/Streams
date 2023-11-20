@@ -1,7 +1,7 @@
 from sqlalchemy import (ForeignKey,
                         Column,
                         TIMESTAMP,
-                        func,
+                        func, UniqueConstraint,
                         )
 from sqlalchemy.orm import (Mapped,
                             mapped_column,
@@ -55,6 +55,9 @@ class Song(Base):
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False,
                         server_default=func.now())
+    playlists = relationship('PlaylistToSong',
+                             back_populates='song',
+                             lazy="joined")
 
 
 class Playlist(Base):
@@ -71,22 +74,23 @@ class Playlist(Base):
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False,
                         server_default=func.now())
+    songs = relationship('PlaylistToSong',
+                         back_populates='playlist',
+                         lazy="joined")
 
 
 class PlaylistToSong(Base):
     __tablename__ = "playlist_to_song"
-
+    __table_args__ = (UniqueConstraint('playlist_id', 'song_id', name='uix_1'),)
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    playlist_id: Mapped[int] = mapped_column(ForeignKey("playlist.id", ondelete="CASCADE"),
-                                             nullable=False)
-    playlist = relationship(argument="Playlist",
-                            backref="PlaylistToSong",
-                            lazy="joined")
-    song_id: Mapped[int] = mapped_column(ForeignKey("song.id", ondelete="CASCADE"),
-                                         nullable=False)
-    song = relationship(argument="Song",
-                        backref="PlaylistToSong",
+    playlist_id: Mapped[int] = mapped_column(ForeignKey("playlist.id", ondelete="CASCADE"), nullable=False)
+    song_id: Mapped[int] = mapped_column(ForeignKey("song.id", ondelete="CASCADE"), nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
+
+    # relationships
+    song = relationship('Song',
+                        back_populates='playlists',
                         lazy="joined")
-    created_at = Column(TIMESTAMP(timezone=True),
-                        nullable=False,
-                        server_default=func.now())
+    playlist = relationship('Playlist',
+                            back_populates='songs',
+                            lazy="joined")

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, List
 
 from fastapi import (APIRouter,
                      UploadFile,
@@ -9,7 +9,7 @@ from fastapi import (APIRouter,
 from app.models import User, Song
 from app.songs.service import SongService
 from app.auth.jwt_handler import AuthProvider
-from app.schemas.song import SongCreate
+from app.schemas.song import SongCreate, ReturnSongInfo
 from app.songs.repository import SongRepository
 
 router = APIRouter(
@@ -29,7 +29,7 @@ async def create_song(song_info: SongCreate = Depends(),
     return result
 
 
-@router.get('/me')
+@router.get('/me', response_model=List[ReturnSongInfo])
 async def get_song_by_user(current_user: User = Depends(AuthProvider().get_current_user),
                            limit: int = 10,
                            offset: int = 0,

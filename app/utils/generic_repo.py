@@ -1,9 +1,8 @@
-
 from sqlalchemy import insert, select
+from sqlalchemy.exc import IntegrityError
 
 from app.db import async_session_factory
 from app.utils.exceptions import AlreadyExist
-from sqlalchemy.exc import IntegrityError
 
 
 class GenericRepository:
@@ -26,7 +25,7 @@ class GenericRepository:
         async with async_session_factory() as session:
             query = select(self.model)
             res = await session.execute(query)
-            return res.scalar()
+            return res.scalars().all()
 
     async def find_one(self, pk: int):
         async with async_session_factory() as session:

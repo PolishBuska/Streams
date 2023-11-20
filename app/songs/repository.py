@@ -32,4 +32,4 @@ class SongRepository(GenericRepository):
                      offset(offset)
                      )
             res = await session.execute(query)
-            return res.scalars().all()
+            return res.unique().scalars().all()

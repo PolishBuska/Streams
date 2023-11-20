@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated,List
 from pydantic import (BaseModel,
                       constr,
                       ConfigDict)
@@ -24,3 +24,9 @@ class ReturnSongInfo(SongBaseInfo):
 class SongFileInfo(SongBaseInfo):
     id: int
     file: FileBase
+
+
+class PlSongs(SongBaseInfo):
+    id: int
+    filename: str
+    link: str

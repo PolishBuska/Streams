@@ -8,7 +8,7 @@ from app.models import User
 from app.auth.jwt_handler import AuthProvider
 
 router = APIRouter(
-    prefix='/listener/me/',
+    prefix='/listener/me',
     tags=['listeners']
 )
 
