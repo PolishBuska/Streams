@@ -8,7 +8,7 @@ from fastapi import (APIRouter,
 
 from app.models import User, Song
 from app.songs.service import SongService
-from app.auth.jwt_handler import AuthProvider
+from app.core.auth.jwt_handler import AuthProvider
 from app.schemas.song import SongCreate, ReturnSongInfo
 from app.songs.repository import SongRepository
 
@@ -33,7 +33,7 @@ async def create_song(song_info: SongCreate = Depends(),
 async def get_song_by_user(current_user: User = Depends(AuthProvider().get_current_user),
                            limit: int = 10,
                            offset: int = 0,
-                           search: Optional[str] = ""
+                           search: Optional[str] = "",
                            ):
     db_adapter = SongRepository(model=Song)
     result = await db_adapter.get_songs_by_user(user_id=current_user.id,

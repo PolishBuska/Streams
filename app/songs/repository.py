@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from app.db import async_session_factory
+from app.core.db import async_session_factory
 from app.utils.generic_repo import GenericRepository
 
 

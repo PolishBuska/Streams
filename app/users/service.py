@@ -1,8 +1,8 @@
+from app.models import User
 from app.schemas.user import CreateUser
 from app.users.repository import UserRepository
 from app.users.exception import RegistrationException
 from app.utils.pwd import PwdContext
-from app.models import User
 
 
 class RegistrationService:

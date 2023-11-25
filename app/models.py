@@ -7,7 +7,7 @@ from sqlalchemy.orm import (Mapped,
                             mapped_column,
                             relationship)
 
-from app.db import Base
+from app.core.db import Base
 
 
 class Roles(Base):
@@ -94,3 +94,17 @@ class PlaylistToSong(Base):
     playlist = relationship('Playlist',
                             back_populates='songs',
                             lazy="joined")
+
+
+class LikedSongs(Base):
+    __tablename__ = "liked_songs"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"),
+                                         nullable=False)
+    user = relationship("User", back_populates='user', lazy="joined", foreign_keys=[user_id])
+    song_id: Mapped[int] = mapped_column(ForeignKey("song.id", ondelete="CASCADE"),
+                                         nullable=False)
+    song = relationship("Song", back_populates='song', lazy="joined", foreign_keys=[song_id])
+
+    created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())

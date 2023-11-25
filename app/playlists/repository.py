@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.orm import joinedload
 
-from app.db import async_session_factory
+from app.core.db import async_session_factory
 from app.utils.generic_repo import GenericRepository
 from app.models import PlaylistToSong
 
@@ -38,4 +38,4 @@ class PlaylistRepository(GenericRepository):
                      offset(offset)
                      )
             res = await session.execute(query)
-            return res.scalars().all()
+            return res.unique().scalars().all()

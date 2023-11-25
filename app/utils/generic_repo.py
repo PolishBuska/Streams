@@ -1,7 +1,7 @@
 from sqlalchemy import insert, select
 from sqlalchemy.exc import IntegrityError
 
-from app.db import async_session_factory
+from app.core.db import async_session_factory
 from app.utils.exceptions import AlreadyExist
 
 

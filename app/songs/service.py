@@ -2,7 +2,7 @@ from app.utils.hashers.hasher import Hasher
 from app.songs.repository import SongRepository
 from app.songs.exceptions import SongError
 from app.models import Song
-from app.config import settings
+from app.core.config import settings
 
 
 class SongService:

@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException, status
 
 from app.playlists.repository import PlaylistRepository
 from app.models import Playlist, PlaylistToSong
@@ -8,6 +8,7 @@ from app.schemas.playlist import ReturnPlaylist
 from app.schemas.song import PlSongs
 
 from app.playlists.service import PlaylistService
+from app.utils.exceptions import NotFound
 
 router = APIRouter(
     tags=['commons'],
@@ -31,6 +32,11 @@ async def find_playlists(
 
 @router.get('/{pl_id}', response_model=List[PlSongs])
 async def find_pl_related_songs(pl_id: int):
-    res = await PlaylistService.find_pl_related_songs(repo=PlaylistRepository(model=PlaylistToSong),
-                                                      pl_id=pl_id)
-    return res
+    try:
+        res = await PlaylistService.find_pl_related_songs(repo=PlaylistRepository(model=PlaylistToSong),
+                                                          pl_id=pl_id)
+        return res
+
+    except NotFound:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail="Not found")

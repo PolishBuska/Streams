@@ -1,7 +1,7 @@
 from app.playlists.exceptions import PlaylistAlreadyExist, M2MRelationExists
 from app.schemas.playlist import SongToPlaylist, CreatePlaylist
 from app.utils.generic_repo import GenericRepository
-from app.utils.exceptions import AlreadyExist
+from app.utils.exceptions import AlreadyExist, NotFound
 
 
 class PlaylistService:
@@ -34,5 +34,7 @@ class PlaylistService:
     @staticmethod
     async def find_pl_related_songs(repo, pl_id: int):
         res = await repo.get_playlist_with_songs(playlist_id=pl_id)
+        if not res:
+            raise NotFound
         return res
 

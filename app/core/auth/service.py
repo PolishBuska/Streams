@@ -1,6 +1,6 @@
-from app.auth.validator import AuthCredValidator
-from app.auth.jwt_handler import AuthProvider
-from app.auth.exceptions import WrongCredsException, AuthServiceError
+from app.core.auth.validator import AuthCredValidator
+from app.core.auth.jwt_handler import AuthProvider
+from app.core.auth.exceptions import WrongCredsException, AuthServiceError
 
 
 class LoginService:

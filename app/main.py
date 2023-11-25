@@ -20,7 +20,7 @@ app.include_router(common_s)
 app.include_router(common_pl)
 app.include_router(pub_s.router)
 app.include_router(pl.router)
-#app.include_router(listener)
+app.include_router(listener)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],

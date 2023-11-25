@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.auth.jwt_handler import AuthProvider
+from app.core.auth.jwt_handler import AuthProvider
 from app.playlists.service import PlaylistService
-from app.schemas.playlist import (SongToPlaylist,
-                                  CreatePlaylist,
+from app.schemas.playlist import (CreatePlaylist,
                                   ReturnPlaylist,
                                   SongToPlaylist,
                                   )

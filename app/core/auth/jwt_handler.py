@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from starlette import status
 
-from app.config import settings
+from app.core.config import settings
 from app.models import User
 from app.schemas.jwt import TokenPayLoad
 from app.users.repository import UserRepository
@@ -15,7 +15,6 @@ class AuthProvider:
     SECRET_KEY = settings.secret_key
     ALGORITHM = settings.algorithm
     ACCESS_TOKEN_EXPIRE_MINUTES = settings.access_token_expire_minutes
-    Model = User
     oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
     async def create_access_token(self,

@@ -2,7 +2,7 @@
 free direct usage"""
 from app.utils.pwd import PwdContext
 from app.users.repository import UserRepository
-from app.auth.exceptions import WrongCredsException, ValidatorError
+from app.core.auth.exceptions import WrongCredsException, ValidatorError
 from app.models import User
 
 
