@@ -1,7 +1,9 @@
+import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.staticfiles import StaticFiles
 
+from app.core.config import settings
 from app.routers import registration, login
 from app.routers.common.song import router as common_s
 from app.routers.common.playlist import router as common_pl
@@ -35,3 +37,10 @@ async def root():
     return "Hello world"
 
 
+def run():
+    uvicorn.run(
+        "app.main:app",
+        host=settings.app_host,
+        port=settings.app_port,
+        reload=True
+    )

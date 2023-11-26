@@ -19,6 +19,7 @@ class SongCreate(SongBaseInfo):
 
 class ReturnSongInfo(SongBaseInfo):
     id: int
+    link: str
 
 
 class SongFileInfo(SongBaseInfo):
@@ -28,5 +29,4 @@ class SongFileInfo(SongBaseInfo):
 
 class PlSongs(SongBaseInfo):
     id: int
-    filename: str
     link: str

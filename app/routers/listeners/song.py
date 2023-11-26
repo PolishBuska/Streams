@@ -4,7 +4,7 @@ from fastapi import (APIRouter,
                      Depends,
                      )
 
-from app.models import User, LikedSongs
+from app.models import User
 from app.core.auth.jwt_handler import AuthProvider
 from app.playlists.personal import PersonalPlaylist
 
@@ -26,10 +26,10 @@ async def get_liked_songs_by_user(current_user: User = Depends(AuthProvider().ge
 @router.post('/{song_id}')
 async def like_song(song_id: int,
                     current_user: User = Depends(AuthProvider().get_current_user)):
-    service = PersonalPlaylist(model=LikedSongs)
-    res = await service.add_to_personal_playlist(data={'song_id': song_id,
-                                                 'user_id': current_user.id})
-    return res
+    #service = PersonalPlaylist(model=LikedSongs)
+    #res = await service.add_to_personal_playlist(data={'song_id': song_id,
+                                                 #'user_id': current_user.id})
+    return 1
 
 
 @router.get('/{song_id}/personal_playlist')

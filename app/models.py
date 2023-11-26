@@ -48,7 +48,7 @@ class Song(Base):
     author_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"),
                                            nullable=False)
     author = relationship("User",
-                          backref="Songs")
+                          backref="Song")
     description: Mapped[str]
     link: Mapped[str]
     filename: Mapped[str]
@@ -67,7 +67,7 @@ class Playlist(Base):
     author_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"),
                                            nullable=False)
     author = relationship("User",
-                          backref="Playlists", lazy="joined")
+                          backref="Playlist", lazy="joined")
 
     title: Mapped[str] = mapped_column(unique=True)
     description: Mapped[str]
@@ -100,11 +100,9 @@ class LikedSongs(Base):
     __tablename__ = "liked_songs"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"),
-                                         nullable=False)
-    user = relationship("User", back_populates='user', lazy="joined", foreign_keys=[user_id])
+    owner_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"),
+                                          nullable=False)
     song_id: Mapped[int] = mapped_column(ForeignKey("song.id", ondelete="CASCADE"),
                                          nullable=False)
-    song = relationship("Song", back_populates='song', lazy="joined", foreign_keys=[song_id])
 
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())

@@ -15,7 +15,7 @@ class SongRepository(GenericRepository):
                 self.model.title.contains(search)).limit(
                 limit).offset(offset)
             res = await session.execute(query)
-            return res.scalars().all()
+            return res.scalars().unique().all()
 
     async def get_songs_by_user(self,
                                 limit: int,

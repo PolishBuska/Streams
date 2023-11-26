@@ -15,7 +15,7 @@ class GenericRepository:
                 stmt = insert(self.model).values(data).returning(self.model)
                 res = await session.execute(stmt)
                 await session.commit()
-                return res.scalar()
+                return res.scalar().one()
             except IntegrityError as ie:
                 raise AlreadyExist from ie
             except Exception as e:
@@ -25,7 +25,7 @@ class GenericRepository:
         async with async_session_factory() as session:
             query = select(self.model)
             res = await session.execute(query)
-            return res.scalars().all()
+            return res.scalars().unique().all()
 
     async def find_one(self, pk: int):
         async with async_session_factory() as session:
