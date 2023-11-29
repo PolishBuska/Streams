@@ -10,6 +10,7 @@ class PlaylistService:
         if isinstance(info, CreatePlaylist):
             self._pl = info
         if isinstance(info, SongToPlaylist):
+            """Usage in subscribe_s_to_p"""
             self._s_pl = info
         self._repo = repo
 

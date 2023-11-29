@@ -8,9 +8,9 @@ from app.utils.pwd import PwdContext
 
 class RegistrationService:
 
-    def __init__(self, creds: CreateUser):
+    def __init__(self, creds: CreateUser, repo):
         self.creds = creds
-        self.repo = UserRepository(model=User)
+        self.repo = repo
         self.hasher = PwdContext()
 
     async def register_user(self):

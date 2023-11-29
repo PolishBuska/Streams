@@ -55,9 +55,6 @@ class Song(Base):
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False,
                         server_default=func.now())
-    playlists = relationship('PlaylistToSong',
-                             back_populates='song',
-                             lazy="joined")
 
 
 class Playlist(Base):
@@ -74,9 +71,6 @@ class Playlist(Base):
     created_at = Column(TIMESTAMP(timezone=True),
                         nullable=False,
                         server_default=func.now())
-    songs = relationship('PlaylistToSong',
-                         back_populates='playlist',
-                         lazy="joined")
 
 
 class PlaylistToSong(Base):
@@ -88,16 +82,14 @@ class PlaylistToSong(Base):
     created_at = Column(TIMESTAMP(timezone=True), nullable=False, server_default=func.now())
 
     # relationships
-    song = relationship('Song',
-                        back_populates='playlists',
-                        lazy="joined")
-    playlist = relationship('Playlist',
-                            back_populates='songs',
-                            lazy="joined")
+    songs = relationship(Song,
+                         lazy="joined",
+                         foreign_keys=song_id)
 
 
 class LikedSongs(Base):
     __tablename__ = "liked_songs"
+    __table_args__ = (UniqueConstraint('owner_id', 'song_id', name='uix_2'),)
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     owner_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"),

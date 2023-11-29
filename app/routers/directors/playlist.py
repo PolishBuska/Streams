@@ -7,11 +7,12 @@ from app.schemas.playlist import (CreatePlaylist,
                                   SongToPlaylist,
                                   )
 from app.models import (Playlist,
-                        User,
-                        PlaylistToSong)
+                        User
+                        )
 from app.playlists.repository import PlaylistRepository
 from app.playlists.exceptions import (PlaylistAlreadyExist,
                                       M2MRelationExists)
+from app.utils.generic_repo import get_repository
 
 router = APIRouter(
     prefix='/director',
@@ -21,9 +22,10 @@ router = APIRouter(
 
 @router.post("/pl/new", response_model=ReturnPlaylist)
 async def create_common_playlist(pl_info: CreatePlaylist,
-                                 current_user: User = Depends(AuthProvider().get_current_user)):
+                                 current_user: User = Depends(AuthProvider().get_current_user),
+                                 repo=Depends(get_repository(model=Playlist, repo=PlaylistRepository))):
     try:
-        service = PlaylistService(repo=PlaylistRepository(model=Playlist),
+        service = PlaylistService(repo=repo,
                                   info=pl_info)
         pl = await service.create_playlist(author_id=current_user.id)
         return pl
@@ -36,9 +38,10 @@ async def create_common_playlist(pl_info: CreatePlaylist,
 
 @router.post("/pl", response_model=SongToPlaylist)
 async def add_m2m_s_pl(s_pl_info: SongToPlaylist,
-                       current_user: User = Depends(AuthProvider().get_current_user)):
+                       current_user: User = Depends(AuthProvider().get_current_user),
+                       repo=Depends(get_repository(model=Playlist, repo=PlaylistRepository))):
     try:
-        service = PlaylistService(repo=PlaylistRepository(model=PlaylistToSong),
+        service = PlaylistService(repo=repo,
                                   info=s_pl_info)
         pl = await service.subscribe_s_to_p()
         return pl

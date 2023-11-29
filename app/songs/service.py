@@ -1,19 +1,21 @@
+from app.utils.generic_repo import GenericRepository
 from app.utils.hashers.hasher import Hasher
 from app.songs.repository import SongRepository
 from app.songs.exceptions import SongError
 from app.models import Song
-from app.core.config import settings
+from config import settings
 
 
 class SongService:
     def __init__(self, file,
                  song_info,
-                 author_id):
+                 author_id,
+                 repo: GenericRepository):
         self.file = file
         self.song_info = song_info
         self.author_id = author_id
         self.path = settings.static,
-        self.repo = SongRepository(model=Song)
+        self.repo = repo
 
     async def upload_song(self):
         try:

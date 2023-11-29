@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from starlette import status
 
-from app.core.config import settings
+from config import settings
 from app.models import User
 from app.schemas.jwt import TokenPayLoad
 from app.users.repository import UserRepository

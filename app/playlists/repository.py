@@ -8,20 +8,19 @@ from app.models import PlaylistToSong
 
 class PlaylistRepository(GenericRepository):
     async def get_playlist_with_songs(self, playlist_id: int):
-        async with async_session_factory() as session:
             stmt = (
                 select(self.model)
-                .options(joinedload(PlaylistToSong.playlist))
+                .options(joinedload(PlaylistToSong.songs))
                 .filter(PlaylistToSong.playlist_id == playlist_id)
             )
 
-            result = await session.execute(stmt)
+            result = await self.session.execute(stmt)
             playlist_to_songs = result.unique().scalars().all()
 
             if not playlist_to_songs:
                 return None
 
-            songs = [pts.song for pts in playlist_to_songs]
+            songs = [pts.songs for pts in playlist_to_songs]
             return songs
 
     async def find_one_pl(self,
@@ -29,7 +28,6 @@ class PlaylistRepository(GenericRepository):
                           offset: int,
                           search: str,
                           ):
-        async with async_session_factory() as session:
             query = (select(self.model).
                      filter(
                 self.model.title.contains(search)).
@@ -37,5 +35,5 @@ class PlaylistRepository(GenericRepository):
                 limit).
                      offset(offset)
                      )
-            res = await session.execute(query)
+            res = await self.session.execute(query)
             return res.unique().scalars().all()

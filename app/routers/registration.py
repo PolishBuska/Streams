@@ -1,9 +1,12 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 
+from app.models import User
 from app.schemas.user import CreateUser, ReturnUser
-from app.users.service import RegistrationService
 from app.users.exception import RegistrationException
+from app.users.repository import UserRepository
+from app.users.service import RegistrationService
 from app.utils.exceptions import AlreadyExist
+from app.utils.generic_repo import get_repository
 
 router = APIRouter(
     prefix="/user",
@@ -13,9 +16,11 @@ router = APIRouter(
 
 @router.post("/registration", response_model=ReturnUser,
              status_code=status.HTTP_201_CREATED)
-async def register(creds: CreateUser):
+async def register(creds: CreateUser,
+                   repo=Depends(get_repository(model=User,
+                                               repo=UserRepository))):
     try:
-        service = RegistrationService(creds=creds)
+        service = RegistrationService(creds=creds, repo=repo)
         user = await service.register_user()
         return user
     except AlreadyExist as ae:
@@ -25,4 +30,3 @@ async def register(creds: CreateUser):
     except RegistrationException as reg_e:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                             detail="Service's not available") from reg_e
-
