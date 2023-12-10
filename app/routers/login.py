@@ -17,6 +17,8 @@ async def login(user_credentials: OAuth2PasswordRequestForm = Depends(),
                 repo=Depends(get_repository(model=User,
                                             repo=UserRepository))):
     try:
+        if not user_credentials:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="No data provided")
         service = LoginService(plain_password=user_credentials.password,
                                email=user_credentials.username,
                                repo=repo)

@@ -30,3 +30,6 @@ async def register(creds: CreateUser,
     except RegistrationException as reg_e:
         raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
                             detail="Service's not available") from reg_e
+
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_405_METHOD_NOT_ALLOWED, detail=f"{e.__dict__}")

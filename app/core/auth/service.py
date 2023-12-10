@@ -1,3 +1,5 @@
+from fastapi import HTTPException,status
+
 from app.core.auth.validator import AuthCredValidator
 from app.core.auth.jwt_handler import AuthProvider
 from app.core.auth.exceptions import WrongCredsException, AuthServiceError
@@ -17,9 +19,12 @@ class LoginService:
         """getting tokens"""
         try:
 
+            user_by_email = await self.repo.find_one_by_email(email=self.email)
+            if not user_by_email:
+                raise HTTPException(status_code=200, detail={'f': user_by_email})
             data = await self.validator.validate(
                                                  plain_password=self.plain_password,
-                                                 db_user=await self.repo.find_one_by_email(email=self.email)
+                                                 db_user=user_by_email
             )
             if not data:
                 raise WrongCredsException from WrongCredsException
